@@ -26,7 +26,7 @@ public class RequestStageRepositoryTest {
 	@Autowired
 	private RequestStageRepository requestStageRepository;
 
-	//@Test
+	// @Test
 	public void saveTest() {
 		User owner = new User();
 		owner.setId(1L);
@@ -41,7 +41,7 @@ public class RequestStageRepositoryTest {
 				request,
 				owner);
 		RequestStage createdStage = requestStageRepository.save(stage);
-		
+
 		assertEquals(createdStage.getId(), 1L);
 	}
 
@@ -49,14 +49,14 @@ public class RequestStageRepositoryTest {
 	public void getByIdTest() {
 		Optional<RequestStage> result = requestStageRepository.findById(1L);
 		RequestStage stage = result.get();
-		
+
 		assertEquals(stage.getDescription(), "Foi comprado um novo laptop de marca HP e com 16 GB de RAM");
 	}
 
 	@Test
 	public void listByRequestIdTest() {
-		List<RequestStage> stages = requestStageRepository.findAll();
-		
+		List<RequestStage> stages = requestStageRepository.findAllByRequestId(1L);
+
 		assertEquals(stages.size(), 1);
 	}
 
