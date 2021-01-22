@@ -33,14 +33,14 @@ public class RequestResource {
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdRequest);
 	}
 
-	@PutMapping("{/id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Request> update(@PathVariable("id") Long id, @RequestBody Request request) {
 		request.setId(id);
 		Request updatedRequest = requestService.update(request);
 		return ResponseEntity.ok(updatedRequest);
 	}
 
-	@GetMapping("{/id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Request> getById(@PathVariable("id") Long id) {
 		Request request = requestService.getById(id);
 		return ResponseEntity.ok(request);
