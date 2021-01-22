@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.springcourse.domain.RequestStage;
-import com.springcourse.domain.enums.RequestState;
 import com.springcourse.repository.RequestRepository;
 import com.springcourse.repository.RequestStageRepository;
 
@@ -20,17 +19,14 @@ public class RequestStageService {
 	@Autowired
 	private RequestRepository requestRepository;
 
-	public RequestStage save(RequestStage stage) {
-		stage.setRealizationDate(new Date());
+	public RequestStage save(RequestStage requestStage) {
+		requestStage.setRealizationDate(new Date());
 
-		RequestStage createdStage = requestStageRepository.save(stage);
+		RequestStage createdRequestStage = requestStageRepository.save(requestStage);
 
-		Long requestId = stage.getRequest().getId();
-		RequestState state = stage.getState();
+		requestRepository.updateState(requestStage.getRequest().getId(), requestStage.getState());
 
-		requestRepository.updateState(requestId, state);
-
-		return createdStage;
+		return createdRequestStage;
 	}
 
 	public RequestStage getById(Long id) {
@@ -39,7 +35,7 @@ public class RequestStageService {
 	}
 
 	public List<RequestStage> listAllByRequestId(Long requestId) {
-		List<RequestStage> stages = requestStageRepository.findAllByRequestId(requestId);
-		return stages;
+		List<RequestStage> requestStages = requestStageRepository.findAllByRequestId(requestId);
+		return requestStages;
 	}
 }
