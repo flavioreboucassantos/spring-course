@@ -1,6 +1,7 @@
 package com.springcourse.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import java.util.Optional;
@@ -73,5 +74,11 @@ public class UserRepositoryTests {
 		User loggedUser = result.get();
 
 		assertThat(loggedUser.getId()).isEqualTo(1L);
+	}
+	
+	@Test
+	public void updateRoleTest() {
+		int affectedRows = userRepository.updateRole(9L, Role.ADMINISTRATOR);
+		assertEquals(affectedRows, 1);
 	}
 }

@@ -65,4 +65,8 @@ public class UserService {
 		Optional<User> result = userRepository.login(email, password);
 		return result.get();
 	}
+	
+	public int updateRole(User user) {
+		return userRepository.updateRole(user.getId(), user.getRole());
+	}
 }
