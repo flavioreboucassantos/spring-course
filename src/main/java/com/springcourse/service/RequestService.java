@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.springcourse.domain.Request;
-import com.springcourse.domain.User;
 import com.springcourse.domain.enums.RequestState;
 import com.springcourse.exception.NotFoundException;
 import com.springcourse.model.PageModel;
