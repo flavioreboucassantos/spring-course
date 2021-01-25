@@ -1,5 +1,7 @@
 package com.springcourse.resource;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springcourse.domain.Request;
 import com.springcourse.domain.User;
 import com.springcourse.dto.UserLoginDTO;
+import com.springcourse.dto.UserSaveDTO;
+import com.springcourse.dto.UserUpdateDTO;
 import com.springcourse.dto.UserUpdateRoleDTO;
 import com.springcourse.model.PageModel;
 import com.springcourse.model.PageRequestModel;
@@ -33,7 +37,8 @@ public class UserResource {
 	private RequestService requestService;
 
 	@PostMapping
-	public ResponseEntity<User> save(@RequestBody User user) {
+	public ResponseEntity<User> save(@RequestBody @Valid UserSaveDTO userDTO) {
+		User user = userDTO.transformToUser();
 		User createdUser = userService.save(user);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
 	}
@@ -41,7 +46,8 @@ public class UserResource {
 	@PutMapping("/{id}")
 	public ResponseEntity<User> update(
 			@PathVariable("id") Long id,
-			@RequestBody User user) {
+			@RequestBody @Valid UserUpdateDTO userDTO) {
+		User user = userDTO.transformToUser();
 		user.setId(id);
 		User updatedUser = userService.update(user);
 		return ResponseEntity.ok(updatedUser);
@@ -64,7 +70,7 @@ public class UserResource {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<User> login(@RequestBody UserLoginDTO userLoginDTO) {
+	public ResponseEntity<User> login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
 		User loggedUser = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
 		return ResponseEntity.ok(loggedUser);
 	}
@@ -81,7 +87,7 @@ public class UserResource {
 
 	@PatchMapping("/role/{id}")
 	public ResponseEntity<?> updateRole(@PathVariable("id") Long id,
-			@RequestBody UserUpdateRoleDTO userDTO) {
+			@RequestBody @Valid UserUpdateRoleDTO userDTO) {
 		User user = new User();
 		user.setId(id);
 		user.setRole(userDTO.getRole());
