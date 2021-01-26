@@ -61,5 +61,5 @@ public class Request implements Serializable {
 
 	@Getter(onMethod = @__({@JsonIgnore}))
 	@OneToMany(mappedBy = "request")
-	private List<RequestStage> stages = new ArrayList<RequestStage>();
+	private List<RequestStage> requestStages = new ArrayList<RequestStage>();
 }
