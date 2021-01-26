@@ -31,7 +31,7 @@ public class UserUpdateDTO {
 	private List<RequestStage> stages = new ArrayList<RequestStage>();
 	
 	public User transformToUser( ) {
-		User user = new User(null, this.name, this.email, this.password, null, this.requests, this.stages);
+		User user = new User(null, name, email, password, null, requests, stages);
 		return user;
 	}
 

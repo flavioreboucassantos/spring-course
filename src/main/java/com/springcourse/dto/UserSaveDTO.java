@@ -36,7 +36,7 @@ public class UserSaveDTO {
 	private List<RequestStage> stages = new ArrayList<RequestStage>();
 	
 	public User transformToUser( ) {
-		User user = new User(null, this.name, this.email, this.password, this.role, this.requests, this.stages);
+		User user = new User(null, name, email, password, role, requests, stages);
 		return user;
 	}
 }
