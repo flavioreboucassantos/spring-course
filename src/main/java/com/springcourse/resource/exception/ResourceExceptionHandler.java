@@ -3,6 +3,7 @@ package com.springcourse.resource.exception;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,13 +24,14 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		ApiError error = new ApiError(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 	}
-
+	
 	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		List<String> errors = new ArrayList<String>();
-		ex.getBindingResult().getAllErrors().forEach(error -> {
-			errors.add(error.getDefaultMessage());
+		List<ApiErrorField> errors = new ArrayList<ApiErrorField>();
+		e.getBindingResult().getFieldErrors().forEach(fieldError -> {
+			ApiErrorField errorField = new ApiErrorField(fieldError.getField(), fieldError.getDefaultMessage());
+			errors.add(errorField);
 		});
 
 		String defaultMessage = "Invalid field(s)";

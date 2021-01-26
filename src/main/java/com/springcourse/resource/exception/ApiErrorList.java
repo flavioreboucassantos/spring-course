@@ -15,9 +15,9 @@ public class ApiErrorList extends ApiError {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private List<String> errors;
+	private List<ApiErrorField> errors;
 
-	public ApiErrorList(int code, String msg, Date date, List<String> errors) {
+	public ApiErrorList(int code, String msg, Date date, List<ApiErrorField> errors) {
 		super(code, msg, date);
 		this.errors = errors;
 	}
