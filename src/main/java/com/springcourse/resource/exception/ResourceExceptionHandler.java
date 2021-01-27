@@ -3,7 +3,6 @@ package com.springcourse.resource.exception;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
