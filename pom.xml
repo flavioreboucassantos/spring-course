@@ -17,6 +17,7 @@
 	<description>SPRING - RESTful API</description>
 	<properties>
 		<java.version>11</java.version>
+		<skipTests>true</skipTests>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -91,5 +92,23 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<spring.profiles.active>dev</spring.profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<spring.profiles.active>prod</spring.profiles.active>
+			</properties>
+		</profile>
+	</profiles>
 
 </project>
