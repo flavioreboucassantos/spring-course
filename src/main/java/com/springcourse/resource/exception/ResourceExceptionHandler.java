@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +23,12 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<ApiError> handle(NotFoundException e) {
 		ApiError error = new ApiError(HttpStatus.NOT_FOUND.value(), e.getMessage(), new Date());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+	}
+	
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<ApiError> handle(BadCredentialsException e) {
+		ApiError error = new ApiError(HttpStatus.UNAUTHORIZED.value(), e.getMessage(), new Date());
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
 	}
 	
 	@Override
