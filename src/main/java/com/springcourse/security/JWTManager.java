@@ -3,11 +3,14 @@ package com.springcourse.security;
 import java.util.Calendar;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.springcourse.constant.SecurityConstants;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+@Service
 public class JWTManager {
 	public String createToken(String email, List<String> roles) {
 		Calendar calendar = Calendar.getInstance();
