@@ -1,5 +1,6 @@
 package com.springcourse.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.springcourse.domain.User;
@@ -17,7 +23,7 @@ import com.springcourse.repository.UserRepository;
 import com.springcourse.service.util.HashUtil;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 
@@ -65,8 +71,23 @@ public class UserService {
 		Optional<User> result = userRepository.login(email, password);
 		return result.get();
 	}
-	
+
 	public int updateRole(User user) {
 		return userRepository.updateRole(user.getId(), user.getRole());
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Optional<User> result = userRepository.findByEmail(username);
+		if (!result.isPresent())
+			throw new UsernameNotFoundException("Doesn't exist user with email " + username);
+		
+		User user = result.get();
+		
+		List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE " + user.getRole().name()));
+		
+		org.springframework.security.core.userdetails.User userSpring = new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities); 
+		
+		return userSpring;
 	}
 }
