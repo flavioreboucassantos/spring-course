@@ -5,6 +5,10 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +39,10 @@ public class UserResource {
 
 	@Autowired
 	private RequestService requestService;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
 
 	@PostMapping
 	public ResponseEntity<User> save(@RequestBody @Valid UserSaveDTO userDTO) {
@@ -71,8 +79,12 @@ public class UserResource {
 
 	@PostMapping("/login")
 	public ResponseEntity<User> login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
-		User loggedUser = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
-		return ResponseEntity.ok(loggedUser);
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userLoginDTO.getEmail(), userLoginDTO.getPassword());
+		Authentication authentication = authenticationManager.authenticate(token);
+		
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		
+		return ResponseEntity.ok(null);
 	}
 
 	@GetMapping("/{id}/requests")
