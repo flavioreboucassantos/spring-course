@@ -29,49 +29,47 @@ import com.springcourse.resource.exception.ApiError;
 import io.jsonwebtoken.Claims;
 
 public class AuthorizationFilter extends OncePerRequestFilter {
-	
-	@Autowired
-	private JwtManager jwtManager;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String jwt = request.getHeader(HttpHeaders.AUTHORIZATION);
-				
+
 		if (jwt == null || !jwt.startsWith(SecurityConstants.JWT_PROVIDER)) {
 			responseError(response, SecurityConstants.JWT_INVALID_MSG);
 			return;
 		}
-		
+
 		jwt = jwt.replace(SecurityConstants.JWT_PROVIDER, "");
-		
+
 		try {
-			Claims claims = jwtManager.parseToken(jwt);
+			Claims claims = JwtManager.parseToken(jwt);
 			String email = claims.getSubject();
 			List<String> roles = (List<String>) claims.get(SecurityConstants.JWT_ROLE_KEY);
-			
+
 			List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
 			roles.forEach(role -> {
 				grantedAuthorities.add(new SimpleGrantedAuthority(role));
 			});
-			
+
 			Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, grantedAuthorities);
-			
+
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-			
+
+			filterChain.doFilter(request, response);
+
 		} catch (Exception e) {
 			responseError(response, e.getMessage());
 			return;
 		}
-		
-		
+
 	}
-	
+
 	private void responseError(HttpServletResponse response, String message) throws IOException {
 		ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED.value(), message, new Date());
 		ObjectMapper objectMapper = new ObjectMapper();
 		String apiErrorString = objectMapper.writeValueAsString(apiError);
-		
+
 		PrintWriter writer = response.getWriter();
 		writer.write(apiErrorString);
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
