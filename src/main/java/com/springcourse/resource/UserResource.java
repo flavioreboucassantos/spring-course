@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springcourse.domain.Request;
 import com.springcourse.domain.User;
 import com.springcourse.dto.UserLoginDTO;
+import com.springcourse.dto.UserLoginResponseDTO;
 import com.springcourse.dto.UserSaveDTO;
 import com.springcourse.dto.UserUpdateDTO;
 import com.springcourse.dto.UserUpdateRoleDTO;
@@ -84,7 +85,7 @@ public class UserResource {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
+	public ResponseEntity<UserLoginResponseDTO> login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userLoginDTO.getEmail(),
 				userLoginDTO.getPassword());
 		Authentication authentication = authenticationManager.authenticate(token);
@@ -99,11 +100,8 @@ public class UserResource {
 				.stream()
 				.map(authority -> authority.getAuthority())
 				.collect(Collectors.toList());
-		
-		String jwt = jwtManager.createToken(email, roles);
-		
 
-		return ResponseEntity.ok(jwt);
+		return ResponseEntity.ok(jwtManager.createToken(email, roles));
 	}
 
 	@GetMapping("/{id}/requests")
