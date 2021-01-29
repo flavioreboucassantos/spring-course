@@ -31,7 +31,7 @@ import com.springcourse.dto.UserUpdateDTO;
 import com.springcourse.dto.UserUpdateRoleDTO;
 import com.springcourse.model.PageModel;
 import com.springcourse.model.PageRequestModel;
-import com.springcourse.security.JWTManager;
+import com.springcourse.security.JwtManager;
 import com.springcourse.service.RequestService;
 import com.springcourse.service.UserService;
 
@@ -49,7 +49,7 @@ public class UserResource {
 	private AuthenticationManager authenticationManager;
 	
 	@Autowired
-	private JWTManager jwtManager;
+	private JwtManager jwtManager;
 
 	@PostMapping
 	public ResponseEntity<User> save(@RequestBody @Valid UserSaveDTO userDTO) {
