@@ -47,9 +47,6 @@ public class UserResource {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
-	@Autowired
-	private JwtManager jwtManager;
 
 	@PostMapping
 	public ResponseEntity<User> save(@RequestBody @Valid UserSaveDTO userDTO) {
@@ -101,7 +98,7 @@ public class UserResource {
 				.map(authority -> authority.getAuthority())
 				.collect(Collectors.toList());
 
-		return ResponseEntity.ok(jwtManager.createToken(email, roles));
+		return ResponseEntity.ok(JwtManager.createToken(email, roles));
 	}
 
 	@GetMapping("/{id}/requests")
