@@ -15,7 +15,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class JwtManager {
-	public UserLoginResponseDTO createToken(String email, List<String> roles) {
+	public static UserLoginResponseDTO createToken(String email, List<String> roles) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DAY_OF_MONTH, SecurityConstants.JWT_EXP_DAYS);
 
@@ -31,10 +31,10 @@ public class JwtManager {
 		return new UserLoginResponseDTO(jwt, expireIn, SecurityConstants.JWT_PROVIDER);
 	}
 
-	public Claims parseToken(String jwt) throws JwtException {
+	public static Claims parseToken(String jwt) throws JwtException {
 		Claims claims = Jwts.parser()
 				.setSigningKey(SecurityConstants.API_KEY.getBytes())
-				.parseClaimsJwt(jwt)
+				.parseClaimsJws(jwt)
 				.getBody();
 
 		return claims;
