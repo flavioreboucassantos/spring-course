@@ -34,7 +34,7 @@ public class RequestRepositoryTests {
 				"Pretendo obter um laptop HP",
 				new Date(),
 				RequestState.OPEN,
-				owner, null);
+				owner, null, null);
 		Request createdRequest = requestRepository.save(request);
 
 		assertEquals(createdRequest.getId(), 1L);
@@ -49,7 +49,7 @@ public class RequestRepositoryTests {
 				"Pretendo obter um laptop HP, de RAM 16 GB",
 				null,
 				RequestState.OPEN,
-				owner, null);
+				owner, null, null);
 		Request updateRequest = requestRepository.save(request);
 
 		assertEquals(updateRequest.getDescription(), "Pretendo obter um laptop HP, de RAM 16 GB");
