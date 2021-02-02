@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,12 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<ApiError> handle(AccessDeniedException e) {
 		ApiError error = new ApiError(HttpStatus.FORBIDDEN.value(), e.getMessage(), new Date());
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+	}
+	
+	@ExceptionHandler(SizeLimitExceededException.class)
+	public ResponseEntity<ApiError> handle(SizeLimitExceededException e) {
+		ApiError error = new ApiError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), new Date());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
 	
 	@Override
