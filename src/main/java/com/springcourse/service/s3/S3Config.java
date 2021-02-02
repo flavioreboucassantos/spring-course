@@ -36,12 +36,12 @@ public class S3Config {
 		return s3;
 	}
 
-	@Bean(name = "awsRegion")
+	@Bean(name = "awsS3Region")
 	public String getRegion() {
 		return Region.getRegion(Regions.SA_EAST_1).getName();
 	}
 
-	@Bean(name = "awsS3Bucket")
+	@Bean(name = "awsS3BucketName")
 	public String getBucket() {
 		return bucketName;
 	}
