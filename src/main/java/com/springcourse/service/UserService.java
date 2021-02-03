@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -54,7 +53,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	public PageModel<User> listAllOnLazyMode(PageRequestModel prm) {
-		Pageable pageable = PageRequest.of(prm.getPage(), prm.getSize());
+		Pageable pageable = prm.toStringPageRequest();
 		Page<User> page = userRepository.findAll(pageable);
 
 		PageModel<User> pm = new PageModel<User>(
@@ -81,13 +80,14 @@ public class UserService implements UserDetailsService {
 		Optional<User> result = userRepository.findByEmail(username);
 		if (!result.isPresent())
 			throw new UsernameNotFoundException("Doesn't exist user with email " + username);
-		
+
 		User user = result.get();
-		
+
 		List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
-		
-		org.springframework.security.core.userdetails.User userSpring = new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities); 
-		
+
+		org.springframework.security.core.userdetails.User userSpring = new org.springframework.security.core.userdetails.User(
+				user.getEmail(), user.getPassword(), authorities);
+
 		return userSpring;
 	}
 }

@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -44,9 +43,9 @@ public class RequestService {
 		List<Request> requests = requestRepository.findAll();
 		return requests;
 	}
-	
+
 	public PageModel<Request> listAllOnLazyMode(PageRequestModel prm) {
-		Pageable pageable = PageRequest.of(prm.getPage(), prm.getSize());
+		Pageable pageable = prm.toStringPageRequest();
 		Page<Request> page = requestRepository.findAll(pageable);
 
 		PageModel<Request> pm = new PageModel<Request>(
@@ -63,7 +62,7 @@ public class RequestService {
 	}
 
 	public PageModel<Request> listAllByOwnerIdOnLazyMode(Long ownerId, PageRequestModel prm) {
-		Pageable pageable = PageRequest.of(prm.getPage(), prm.getSize());
+		Pageable pageable = prm.toStringPageRequest();
 		Page<Request> page = requestRepository.findAllByOwnerId(ownerId, pageable);
 		PageModel<Request> pm = new PageModel<Request>(
 				(int) page.getTotalElements(),
