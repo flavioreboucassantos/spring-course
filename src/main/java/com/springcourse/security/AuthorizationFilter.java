@@ -26,6 +26,7 @@ import com.springcourse.constant.SecurityConstants;
 import com.springcourse.resource.exception.ApiError;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 
 public class AuthorizationFilter extends OncePerRequestFilter {
 
@@ -57,7 +58,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
 			filterChain.doFilter(request, response);
 
-		} catch (Exception e) {
+		} catch (JwtException e) {
 			responseError(response, e.getMessage());
 			return;
 		}
