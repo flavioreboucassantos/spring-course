@@ -1,6 +1,13 @@
 package com.springcourse.service.s3;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -47,7 +54,7 @@ public class S3Service {
 				s3.putObject(request);
 
 				String location = getFileLocation(s3Filename);
-
+				
 				UploadedFileModel uploadedFileModel = new UploadedFileModel(originalName, location);
 				uploadedFiles.add(uploadedFileModel);
 
@@ -60,7 +67,8 @@ public class S3Service {
 		return uploadedFiles;
 	}
 
-	private String getFileLocation(String filename) {
+	private String getFileLocation(String filename) throws UnsupportedEncodingException {
+		filename = URLEncoder.encode(filename, StandardCharsets.UTF_8.toString());
 		return "https://" + bucketName + ".s3-" + region + ".amazonaws.com/" + filename;
 	}
 
