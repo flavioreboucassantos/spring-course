@@ -23,10 +23,10 @@ public class PageRequestModel {
 	private String sort = "";
 
 	public PageRequestModel(Map<String, String> params) {
-		if (params.containsKey("page"))
+		if (params.containsKey("page") && !params.get("page").trim().equals(""))
 			page = Integer.parseInt(params.get("page"));
 
-		if (params.containsKey("size"))
+		if (params.containsKey("size") && !params.get("size").trim().equals(""))
 			size = Integer.parseInt(params.get("size"));
 
 		if (params.containsKey("sort"))
